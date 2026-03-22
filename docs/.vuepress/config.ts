@@ -6,7 +6,7 @@ export default defineUserConfig({
   lang: 'fr-FR',
   title: 'FILM-IA Docs',
   description: 'Documentation interne pour la plateforme Moovies par IA',
-  base: '/',
+  base: process.env.BASE || '/',
   head: [
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
     ['meta', { name: 'theme-color', content: '#111827' }],
