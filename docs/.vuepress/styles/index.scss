@@ -1,0 +1,44 @@
+:root {
+  --c-bg: #0b1224;
+  --c-surface: #0f172a;
+  --c-accent: #22d3ee;
+  --c-accent-2: #14b8a6;
+  --c-text: #e5e7eb;
+}
+
+body {
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+a {
+  color: var(--c-accent);
+}
+
+a:hover {
+  color: var(--c-accent-2);
+}
+
+.navbar, .sidebar {
+  backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.75) !important;
+}
+
+.page .theme-default-content {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+}
+
+.theme-default-content code {
+  background: rgba(34, 211, 238, 0.12);
+  color: #67e8f9;
+}
+
+.theme-default-content pre code {
+  background: transparent;
+  color: #e2e8f0;
+}

@@ -1,0 +1,396 @@
+<template><div><h1 id="film-ia-—-moovies-platform" tabindex="-1"><a class="header-anchor" href="#film-ia-—-moovies-platform"><span>FILM-IA — Moovies Platform</span></a></h1>
+<blockquote>
+<p>Plateforme de production vidéo par IA — fondée par d0c</p>
+</blockquote>
+<h2 id="architecture" tabindex="-1"><a class="header-anchor" href="#architecture"><span>Architecture</span></a></h2>
+<div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre v-pre><code class="language-text"><span class="line">┌─────────────────────────────────────────────────────────────────┐</span>
+<span class="line">│                        INFRASTRUCTURE                          │</span>
+<span class="line">├───────────────┬──────────────────┬──────────────────────────────┤</span>
+<span class="line">│   VPS Debian  │   Google Cloud   │       Domaines              │</span>
+<span class="line">│ 51.254.139.35 │   Run (europe)   │                             │</span>
+<span class="line">├───────────────┴──────────────────┴──────────────────────────────┤</span>
+<span class="line">│                                                                 │</span>
+<span class="line">│  ┌──────────┐  ┌──────────────┐  ┌───────────────────────────┐ │</span>
+<span class="line">│  │  4uth    │  │ moovies-rest │  │    quasar-moovies         │ │</span>
+<span class="line">│  │ Symfony  │  │  Cloud Run   │  │    Vue 3 / Quasar         │ │</span>
+<span class="line">│  │ Auth API │  │  REST API    │  │    SPA Frontend           │ │</span>
+<span class="line">│  │ :8010    │  │  :8080       │  │    Firebase Hosting       │ │</span>
+<span class="line">│  └────┬─────┘  └──────────────┘  └───────────────────────────┘ │</span>
+<span class="line">│       │                                                         │</span>
+<span class="line">│  ┌────┴─────┐  ┌──────────────┐  ┌───────────────────────────┐ │</span>
+<span class="line">│  │ PostgreSQL│  │ moovies-grpc │  │    w4n                    │ │</span>
+<span class="line">│  │ db_4uth  │  │  Cloud Run   │  │    Network Monitor        │ │</span>
+<span class="line">│  │ :5432    │  │  gRPC API    │  │    tshark + Vue dashboard │ │</span>
+<span class="line">│  └──────────┘  └──────────────┘  └───────────────────────────┘ │</span>
+<span class="line">│                                                                 │</span>
+<span class="line">│  ┌──────────┐                                                   │</span>
+<span class="line">│  │ MongoDB  │  Stockage paquets réseau (w4n)                   │</span>
+<span class="line">│  │ :27017   │                                                   │</span>
+<span class="line">│  └──────────┘                                                   │</span>
+<span class="line">└─────────────────────────────────────────────────────────────────┘</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="projets" tabindex="-1"><a class="header-anchor" href="#projets"><span>Projets</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Dossier</th>
+<th>Stack</th>
+<th>Rôle</th>
+<th>Déployé sur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code v-pre>4uth/</code></td>
+<td>Symfony 7.2 + PostgreSQL 15</td>
+<td>Auth microservice (JWT RS256)</td>
+<td>VPS — <code v-pre>auth.keyops.fr</code></td>
+</tr>
+<tr>
+<td><code v-pre>moovies-gateway/</code></td>
+<td>NestJS + TypeScript</td>
+<td>API REST + gRPC gateway</td>
+<td>Cloud Run — <code v-pre>europe-west4</code></td>
+</tr>
+<tr>
+<td><code v-pre>quasar-moovies/</code></td>
+<td>Vue 3 + Quasar + Vite</td>
+<td>Frontend SPA</td>
+<td>Firebase Hosting / <code v-pre>moovies-ai.web.app</code></td>
+</tr>
+<tr>
+<td><code v-pre>w4n/</code></td>
+<td>Node.js + Vue 3 + tshark + MongoDB</td>
+<td>Monitoring réseau temps réel</td>
+<td>VPS — <code v-pre>monitor.keyops.fr</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="domaines-urls" tabindex="-1"><a class="header-anchor" href="#domaines-urls"><span>Domaines &amp; URLs</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Service</th>
+<th>SSL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code v-pre>https://auth.keyops.fr</code></td>
+<td>4uth (Symfony auth + backoffice EasyAdmin)</td>
+<td>✅ Let's Encrypt</td>
+</tr>
+<tr>
+<td><code v-pre>https://auth.keyops.fr/admin</code></td>
+<td>Backoffice EasyAdmin</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code v-pre>https://monitor.keyops.fr</code></td>
+<td>w4n (dashboard monitoring)</td>
+<td>✅ Let's Encrypt</td>
+</tr>
+<tr>
+<td><code v-pre>https://moovies-rest-787293259783.europe-west4.run.app</code></td>
+<td>Gateway REST</td>
+<td>✅ GCP managed</td>
+</tr>
+<tr>
+<td><code v-pre>https://moovies-grpc-787293259783.europe-west4.run.app</code></td>
+<td>Gateway gRPC</td>
+<td>✅ GCP managed</td>
+</tr>
+<tr>
+<td><code v-pre>https://moovies-ai.web.app</code></td>
+<td>Frontend Quasar</td>
+<td>✅ Firebase</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vps-debian-—-51-254-139-35" tabindex="-1"><a class="header-anchor" href="#vps-debian-—-51-254-139-35"><span>VPS Debian — <code v-pre>51.254.139.35</code></span></a></h2>
+<h3 id="acces-ssh" tabindex="-1"><a class="header-anchor" href="#acces-ssh"><span>Accès SSH</span></a></h3>
+<table>
+<thead>
+<tr>
+<th>User</th>
+<th>Rôle</th>
+<th>sudo</th>
+<th>Auth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code v-pre>d0c</code></td>
+<td>Admin principal</td>
+<td>✅ full NOPASSWD</td>
+<td>Clé SSH</td>
+</tr>
+<tr>
+<td><code v-pre>claude</code></td>
+<td>CI/deploy</td>
+<td>⚠️ restreint (build only)</td>
+<td>Clé SSH</td>
+</tr>
+<tr>
+<td><code v-pre>debian</code></td>
+<td>Legacy OVH</td>
+<td>❌ aucun</td>
+<td>Clé SSH</td>
+</tr>
+<tr>
+<td><code v-pre>root</code></td>
+<td>Rescue</td>
+<td>Locked</td>
+<td>Bloqué</td>
+</tr>
+</tbody>
+</table>
+<h3 id="services-systemd" tabindex="-1"><a class="header-anchor" href="#services-systemd"><span>Services systemd</span></a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Port</th>
+<th>Commande</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code v-pre>php8.3-fpm</code></td>
+<td>socket</td>
+<td><code v-pre>sudo systemctl restart php8.3-fpm</code></td>
+</tr>
+<tr>
+<td><code v-pre>nginx</code></td>
+<td>80/443</td>
+<td><code v-pre>sudo systemctl reload nginx</code></td>
+</tr>
+<tr>
+<td><code v-pre>postgresql</code></td>
+<td>5432</td>
+<td><code v-pre>sudo systemctl status postgresql</code></td>
+</tr>
+<tr>
+<td><code v-pre>w4n</code></td>
+<td>3001</td>
+<td><code v-pre>sudo systemctl restart w4n</code></td>
+</tr>
+<tr>
+<td><code v-pre>mongod</code></td>
+<td>27017</td>
+<td><code v-pre>sudo systemctl status mongod</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="firewall-ufw" tabindex="-1"><a class="header-anchor" href="#firewall-ufw"><span>Firewall (UFW)</span></a></h3>
+<div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre v-pre><code class="language-text"><span class="line">22/tcp    SSH</span>
+<span class="line">80/tcp    HTTP</span>
+<span class="line">443/tcp   HTTPS</span>
+<span class="line">2222/tcp  SSH alt</span>
+<span class="line">8001/tcp  Dev</span>
+<span class="line">8010/tcp  4uth API</span>
+<span class="line">50052/tcp gRPC dev</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="securite" tabindex="-1"><a class="header-anchor" href="#securite"><span>Sécurité</span></a></h3>
+<ul>
+<li><strong>fail2ban</strong> — anti brute-force SSH/nginx</li>
+<li><strong>UFW</strong> — deny par défaut, ports explicites</li>
+<li><strong>Lynis</strong> — score 81/100</li>
+<li><strong>w4n</strong> — monitoring réseau temps réel</li>
+<li><strong>Cloud Monitoring</strong> — alertes 5xx et latence sur Cloud Run</li>
+</ul>
+<h3 id="backups" tabindex="-1"><a class="header-anchor" href="#backups"><span>Backups</span></a></h3>
+<ul>
+<li><strong>Cron quotidien</strong> 3h UTC : <code v-pre>pg_dump db_4uth → gzip → gs://moovies-4uth-backups</code></li>
+<li><strong>Rétention</strong> : 90 jours auto-delete sur GCS</li>
+<li><strong>Script</strong> : <code v-pre>/usr/local/bin/backup-4uth.sh</code></li>
+<li><strong>Logs</strong> : <code v-pre>/var/log/4uth-backup.log</code></li>
+</ul>
+<hr>
+<h2 id="_4uth-—-auth-microservice" tabindex="-1"><a class="header-anchor" href="#_4uth-—-auth-microservice"><span>4uth — Auth Microservice</span></a></h2>
+<h3 id="stack" tabindex="-1"><a class="header-anchor" href="#stack"><span>Stack</span></a></h3>
+<ul>
+<li>Symfony 7.2 skeleton</li>
+<li>PostgreSQL 15 (VPS) / 16 (dev local)</li>
+<li>Lexik JWT RS256</li>
+<li>EasyAdmin v5 (backoffice)</li>
+<li>NelmiO CORS</li>
+</ul>
+<h3 id="api-routes" tabindex="-1"><a class="header-anchor" href="#api-routes"><span>API Routes</span></a></h3>
+<div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre v-pre><code class="language-text"><span class="line">POST   /api/auth/register    → Créer un compte (public)</span>
+<span class="line">POST   /api/auth/login       → Login JSON, retourne JWT (public)</span>
+<span class="line">GET    /api/auth/me          → Profil utilisateur (auth)</span>
+<span class="line">POST   /api/auth/refresh     → Rotation refresh token (public)</span>
+<span class="line">PUT    /api/auth/profile     → Modifier profil (auth)</span>
+<span class="line">POST   /api/auth/logout      → Invalider refresh token (auth)</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="entities" tabindex="-1"><a class="header-anchor" href="#entities"><span>Entities</span></a></h3>
+<p><strong>User</strong> : id, email (unique), roles (JSON), password, displayName, firstName, lastName, phone, avatarUrl, isActive, createdAt, updatedAt</p>
+<p><strong>RefreshToken</strong> : id, user (FK CASCADE), token (unique 128), expiresAt, createdAt</p>
+<h3 id="jwt-flow" tabindex="-1"><a class="header-anchor" href="#jwt-flow"><span>JWT Flow</span></a></h3>
+<div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre v-pre><code class="language-text"><span class="line">Client → POST /login (email+password)</span>
+<span class="line">       ← { access_token (JWT RS256, 1h), refresh_token (opaque, 30j) }</span>
+<span class="line"></span>
+<span class="line">Client → GET /api/* + Authorization: Bearer &lt;JWT></span>
+<span class="line">       ← Validated stateless by Symfony</span>
+<span class="line"></span>
+<span class="line">Gateway → Validates JWT with public key only (no network call to 4uth)</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="backoffice" tabindex="-1"><a class="header-anchor" href="#backoffice"><span>Backoffice</span></a></h3>
+<ul>
+<li>URL : <code v-pre>https://auth.keyops.fr/admin</code></li>
+<li>Login avec un compte ROLE_ADMIN</li>
+<li>CRUD Users : créer, éditer, supprimer, changer rôles, activer/désactiver</li>
+</ul>
+<h3 id="config-cles" tabindex="-1"><a class="header-anchor" href="#config-cles"><span>Config clés</span></a></h3>
+<ul>
+<li><code v-pre>.env.local</code> : credentials prod (DB, JWT passphrase, CORS)</li>
+<li><code v-pre>config/jwt/</code> : RSA keypair (private.pem + public.pem)</li>
+<li><code v-pre>config/packages/security.yaml</code> : firewalls (login, api, admin)</li>
+</ul>
+<hr>
+<h2 id="w4n-—-network-monitor" tabindex="-1"><a class="header-anchor" href="#w4n-—-network-monitor"><span>w4n — Network Monitor</span></a></h2>
+<h3 id="stack-1" tabindex="-1"><a class="header-anchor" href="#stack-1"><span>Stack</span></a></h3>
+<ul>
+<li>Backend : Node.js + tshark + WebSocket + MongoDB</li>
+<li>Dashboard : Vue 3 + Vite</li>
+</ul>
+<h3 id="auth" tabindex="-1"><a class="header-anchor" href="#auth"><span>Auth</span></a></h3>
+<ul>
+<li>Login via 4uth API (email/password)</li>
+<li>Accès ROLE_ADMIN uniquement</li>
+<li>WebSocket protégé par JWT (token en query string)</li>
+</ul>
+<h3 id="scoring-reseau" tabindex="-1"><a class="header-anchor" href="#scoring-reseau"><span>Scoring réseau</span></a></h3>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Score</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>22 (SSH)</td>
+<td>+50</td>
+<td>Scan SSH</td>
+</tr>
+<tr>
+<td>23 (Telnet)</td>
+<td>+50</td>
+<td>Scan Telnet</td>
+</tr>
+<tr>
+<td>445 (SMB)</td>
+<td>+50</td>
+<td>Scan SMB</td>
+</tr>
+<tr>
+<td>3389 (RDP)</td>
+<td>+40</td>
+<td>Scan RDP</td>
+</tr>
+<tr>
+<td>&lt; 1024</td>
+<td>+10</td>
+<td>Port bas</td>
+</tr>
+<tr>
+<td>Scanner connu</td>
+<td>+20</td>
+<td>Bonus réseau suspect</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Seuil d'alerte : score ≥ 40</li>
+<li>IP VPS (sortant) : ignoré</li>
+<li>IP whitelistée : ignorée</li>
+<li>Buffer MongoDB : flush toutes les 50 paquets ou 10s</li>
+</ul>
+<hr>
+<h2 id="moovies-gateway-—-api-gateway" tabindex="-1"><a class="header-anchor" href="#moovies-gateway-—-api-gateway"><span>moovies-gateway — API Gateway</span></a></h2>
+<h3 id="stack-2" tabindex="-1"><a class="header-anchor" href="#stack-2"><span>Stack</span></a></h3>
+<ul>
+<li>NestJS + TypeScript</li>
+<li>REST (port 8080) + gRPC (port 50051)</li>
+<li>Déployé sur Cloud Run (<code v-pre>--use-http2</code> pour gRPC)</li>
+</ul>
+<h3 id="deploiement-cloud-run" tabindex="-1"><a class="header-anchor" href="#deploiement-cloud-run"><span>Déploiement Cloud Run</span></a></h3>
+<div class="language-bash line-numbers-mode" data-highlighter="prismjs" data-ext="sh"><pre v-pre><code class="language-bash"><span class="line">gcloud builds submit <span class="token parameter variable">--tag</span> europe-west4-docker.pkg.dev/moovies-ai/moovies/gateway:latest</span>
+<span class="line">gcloud run deploy moovies-rest <span class="token parameter variable">--image</span><span class="token operator">=</span><span class="token punctuation">..</span>. <span class="token parameter variable">--region</span><span class="token operator">=</span>europe-west4</span>
+<span class="line">gcloud run deploy moovies-grpc <span class="token parameter variable">--image</span><span class="token operator">=</span><span class="token punctuation">..</span>. <span class="token parameter variable">--region</span><span class="token operator">=</span>europe-west4 --use-http2</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><hr>
+<h2 id="quasar-moovies-—-frontend" tabindex="-1"><a class="header-anchor" href="#quasar-moovies-—-frontend"><span>quasar-moovies — Frontend</span></a></h2>
+<h3 id="stack-3" tabindex="-1"><a class="header-anchor" href="#stack-3"><span>Stack</span></a></h3>
+<ul>
+<li>Vue 3 + Quasar Framework + Vite</li>
+<li>Thème dark copper (gradients sombres, accents cuivrés)</li>
+<li>Firebase Hosting</li>
+</ul>
+<h3 id="auth-composables" tabindex="-1"><a class="header-anchor" href="#auth-composables"><span>Auth composables</span></a></h3>
+<ul>
+<li><code v-pre>src/composables/useAuth.ts</code> — auth 4uth (remplace progressivement Firebase)</li>
+<li><code v-pre>src/lib/auth/api.ts</code> — HTTP client 4uth</li>
+</ul>
+<h3 id="pages-cles" tabindex="-1"><a class="header-anchor" href="#pages-cles"><span>Pages clés</span></a></h3>
+<ul>
+<li><code v-pre>/login</code> — LoginView</li>
+<li><code v-pre>/profile</code> — ProfileView</li>
+<li><code v-pre>/launch</code> — FunnelStepper (production vidéo)</li>
+</ul>
+<hr>
+<h2 id="monitoring-alertes" tabindex="-1"><a class="header-anchor" href="#monitoring-alertes"><span>Monitoring &amp; Alertes</span></a></h2>
+<h3 id="vps-w4n" tabindex="-1"><a class="header-anchor" href="#vps-w4n"><span>VPS (w4n)</span></a></h3>
+<ul>
+<li>Dashboard temps réel : <code v-pre>https://monitor.keyops.fr</code></li>
+<li>Capture tshark sur <code v-pre>ens3</code></li>
+<li>Alertes WebSocket pour score ≥ 40</li>
+</ul>
+<h3 id="cloud-run-gcp" tabindex="-1"><a class="header-anchor" href="#cloud-run-gcp"><span>Cloud Run (GCP)</span></a></h3>
+<ul>
+<li><strong>Alerte 5xx</strong> : taux &gt; 0.1/s pendant 1min → email d0c@keyops.fr + theophile.vast@gmail.com</li>
+<li><strong>Alerte latence</strong> : p95 &gt; 5s pendant 5min → mêmes destinataires</li>
+<li>Console : <a href="https://console.cloud.google.com/monitoring/alerting?project=moovies-ai" target="_blank" rel="noopener noreferrer">Cloud Monitoring<ExternalLinkIcon/></a></li>
+</ul>
+<hr>
+<h2 id="commandes-utiles" tabindex="-1"><a class="header-anchor" href="#commandes-utiles"><span>Commandes utiles</span></a></h2>
+<div class="language-bash line-numbers-mode" data-highlighter="prismjs" data-ext="sh"><pre v-pre><code class="language-bash"><span class="line"><span class="token comment"># SSH VPS</span></span>
+<span class="line"><span class="token function">ssh</span> d0c@51.254.139.35</span>
+<span class="line"></span>
+<span class="line"><span class="token comment"># Logs 4uth</span></span>
+<span class="line"><span class="token function">ssh</span> d0c@51.254.139.35 <span class="token string">"sudo tail -f /var/log/nginx/4uth_error.log"</span></span>
+<span class="line"></span>
+<span class="line"><span class="token comment"># Logs w4n</span></span>
+<span class="line"><span class="token function">ssh</span> d0c@51.254.139.35 <span class="token string">"sudo journalctl -u w4n -f"</span></span>
+<span class="line"></span>
+<span class="line"><span class="token comment"># Backup manuel</span></span>
+<span class="line"><span class="token function">ssh</span> d0c@51.254.139.35 <span class="token string">"/usr/local/bin/backup-4uth.sh"</span></span>
+<span class="line"></span>
+<span class="line"><span class="token comment"># Lister backups</span></span>
+<span class="line">gsutil <span class="token function">ls</span> <span class="token parameter variable">-l</span> gs://moovies-4uth-backups/</span>
+<span class="line"></span>
+<span class="line"><span class="token comment"># Restaurer backup</span></span>
+<span class="line">gsutil <span class="token function">cat</span> gs://moovies-4uth-backups/4uth_XXXX.sql.gz <span class="token operator">|</span> gunzip <span class="token operator">|</span> psql db_4uth</span>
+<span class="line"></span>
+<span class="line"><span class="token comment"># Lynis audit</span></span>
+<span class="line"><span class="token function">ssh</span> d0c@51.254.139.35 <span class="token string">"sudo lynis audit system"</span></span>
+<span class="line"></span>
+<span class="line"><span class="token comment"># Cloud Run logs</span></span>
+<span class="line">gcloud logging <span class="token builtin class-name">read</span> <span class="token string">"resource.type=cloud_run_revision AND resource.labels.service_name=moovies-rest AND severity>=WARNING"</span> <span class="token parameter variable">--project</span><span class="token operator">=</span>moovies-ai <span class="token parameter variable">--limit</span><span class="token operator">=</span><span class="token number">10</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><hr>
+<h2 id="compte-test" tabindex="-1"><a class="header-anchor" href="#compte-test"><span>Compte test</span></a></h2>
+<div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre v-pre><code class="language-text"><span class="line">Email:    test@moovies.app</span>
+<span class="line">Password: Test1234</span>
+<span class="line">Rôle:     ROLE_ADMIN</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><blockquote>
+<p>⚠️ Changer ce mot de passe en production</p>
+</blockquote>
+</div></template>
+
+
